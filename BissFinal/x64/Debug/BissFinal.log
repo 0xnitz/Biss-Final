@@ -1,0 +1,6 @@
+﻿  ScreenKiller.cpp
+C:\Users\Nitzan\source\repos\BissFinal\BissFinal\ScreenKiller.cpp(66,154): warning C4267: 'argument': conversion from 'size_t' to 'DWORD', possible loss of data
+  main.cpp
+  Generating Code...
+C:\Users\Nitzan\source\repos\BissFinal\BissFinal\ScreenKiller.cpp(67): warning C4715: 'ScreenKiller::get_persistency': not all control paths return a value
+  BissFinal.vcxproj -> C:\Users\Nitzan\source\repos\BissFinal\x64\Debug\BissFinal.exe
