@@ -1,0 +1,7 @@
+﻿  main.cpp
+  ScreenKiller.cpp
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  All 47 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  BissFinal.vcxproj -> C:\Users\Nitzan\source\repos\BissFinal\x64\Release\BissFinal.exe
