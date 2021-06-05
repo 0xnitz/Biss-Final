@@ -1,0 +1,6 @@
+﻿  main.cpp
+  ScreenKiller.cpp
+C:\Users\Nitzan\source\repos\BissFinal\BissFinal\ScreenKiller.cpp(88,9): warning C4552: '!=': result of expression not used
+C:\Users\Nitzan\source\repos\BissFinal\BissFinal\ScreenKiller.cpp(70,12): warning C4101: 'schService': unreferenced local variable
+  Generating Code...
+  BissFinal.vcxproj -> C:\Users\Nitzan\source\repos\BissFinal\x64\Debug\BissFinal.exe
