@@ -90,7 +90,6 @@ bool ScreenKiller::is_debugged1()
 
 bool ScreenKiller::is_debugged2()
 {
-		// detect debugger by process file (for example: ollydbg.exe)
 		const wchar_t* debuggersFilename[6] = {
 			L"cheatengine-x86_64.exe",
 			L"ollydbg.exe",
@@ -107,7 +106,7 @@ bool ScreenKiller::is_debugged2()
 		processList = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, NULL);
 		processInformation = { sizeof(PROCESSENTRY32W) };
 		if (!(Process32FirstW(processList, &processInformation)))
-			printf("[Warning] It is impossible to check process list.");
+			return false;
 		else
 		{
 			do

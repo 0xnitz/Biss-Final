@@ -5,7 +5,6 @@
 
 int main()
 {
-    //Todo: encrypt strings
     ScreenKiller screenkiller;
 
     screenkiller.deploy();
