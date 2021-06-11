@@ -1,8 +1,6 @@
-﻿  ScreenKiller.cpp
-  main.cpp
-  Generating code
-  10 of 138 functions ( 7.2%) were compiled, the rest were copied from previous compilation.
+﻿  Generating code
+  0 of 138 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    2 functions had inline decision re-evaluated but remain unchanged
+    0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   BissFinal.vcxproj -> C:\Users\Nitzan\source\repos\BissFinal\x64\Release\BissFinal.exe
