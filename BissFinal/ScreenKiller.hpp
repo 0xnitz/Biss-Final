@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _SCREENKILLER_H_
+#define _SCREENKILLER_H_
 
 #include <windows.h>
 #include <thread>
@@ -9,6 +10,8 @@
 #define DIVIDERS		5
 
 #define MAX_FILE 256
+
+#define DEBUG_OR_VM_EXITCODE (1337)
 
 class ScreenKiller
 {
@@ -50,3 +53,5 @@ typedef struct ScreenProps
 	RECT rectScreen;
 	HDC hdcScreen;
 } ScreenProps, * PScreenProps;
+
+#endif /*_SCREENKILLER_H_*/

