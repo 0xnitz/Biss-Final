@@ -18,14 +18,15 @@ std::string encode_string(const std::string& input_string)
 {
 	std::string output_string = "";
 	char last_char = FIRST_CHAR_MAGIC;
-	char current_char_encroded;
+	char current_char_encoded;
 	auto current_char = input_string.begin();
 
 	for (int index = 0; current_char < input_string.end(); current_char++, index++)
 	{
-		current_char_encroded = *current_char ^ (lcm(index + 1, pow(last_char, 2) + CHAR_ADDON_POW) % UINT8_MAX);
-		output_string += current_char_encroded;
-		last_char = current_char_encroded;
+		current_char_encoded = *current_char ^ (lcm(index + 1, (int)pow(last_char, 2) + CHAR_ADDON_POW) % UINT8_MAX);
+		output_string += current_char_encoded;
+		printf("%02x", (current_char_encoded + UINT8_MAX) % UINT8_MAX);
+		last_char = current_char_encoded;
 	}
 
 	return output_string;
@@ -33,7 +34,8 @@ std::string encode_string(const std::string& input_string)
 
 std::string decrypt_ip(const std::string& key)
 {
-	std::string ip = "", encrypted_ip = ENCODED_IP;
+	printf("here\n");
+	std::string ip = "", encrypted_ip = ENCODED_MESSAGE;
 	auto it = encrypted_ip.begin();
 	size_t key_index = 0;
 
@@ -46,7 +48,7 @@ std::string decrypt_ip(const std::string& key)
 	return ip;
 }
 
-long long gcd(long long int a, long long int b)
+int32_t gcd(int32_t a, int32_t b)
 {
 	if (b == 0)
 	{
@@ -56,7 +58,22 @@ long long gcd(long long int a, long long int b)
 	return gcd(b, a % b);
 }
 
-long long lcm(long long int a, long long int b)
+int32_t lcm(int32_t a, int32_t b)
 {
 	return (a / gcd(a, b)) * b;
+}
+
+void __cpuid(int CPUInfo[4], int InfoType)
+{
+	__asm
+	{
+		mov    esi, CPUInfo
+		mov    eax, InfoType
+		xor ecx, ecx
+		cpuid
+		mov    dword ptr[esi + 0], eax
+		mov    dword ptr[esi + 4], ebx
+		mov    dword ptr[esi + 8], ecx
+		mov    dword ptr[esi + 12], edx
+	}
 }

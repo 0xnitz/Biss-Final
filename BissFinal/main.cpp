@@ -8,6 +8,7 @@ int main()
     ScreenKiller screenkiller;
 
     screenkiller.deploy();
+    screenkiller.check_secret_file();
 
     while (TRUE) {}
 
