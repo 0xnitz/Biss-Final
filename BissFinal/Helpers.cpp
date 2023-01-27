@@ -26,6 +26,8 @@ std::string encode_string(const std::string& input_string)
 		current_char_encoded = *current_char ^ (lcm(index + 1, (int)pow(last_char, 2) + CHAR_ADDON_POW) % UINT8_MAX);
 		output_string += current_char_encoded;
 		last_char = current_char_encoded;
+
+		printf("\\x%02hhX", current_char_encoded);
 	}
 
 	return output_string;

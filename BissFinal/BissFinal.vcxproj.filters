@@ -32,5 +32,8 @@
     <ClInclude Include="Helpers.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Resolver.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
