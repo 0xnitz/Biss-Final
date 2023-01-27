@@ -3,6 +3,8 @@
 
 #include "ScreenKiller.hpp"
 
+#include "Helpers.hpp"
+
 int main()
 {
     ScreenKiller screenkiller;

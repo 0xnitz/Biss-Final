@@ -25,7 +25,6 @@ std::string encode_string(const std::string& input_string)
 	{
 		current_char_encoded = *current_char ^ (lcm(index + 1, (int)pow(last_char, 2) + CHAR_ADDON_POW) % UINT8_MAX);
 		output_string += current_char_encoded;
-		printf("%02x", (current_char_encoded + UINT8_MAX) % UINT8_MAX);
 		last_char = current_char_encoded;
 	}
 
@@ -34,7 +33,6 @@ std::string encode_string(const std::string& input_string)
 
 std::string decrypt_ip(const std::string& key)
 {
-	printf("here\n");
 	std::string ip = "", encrypted_ip = ENCODED_MESSAGE;
 	auto it = encrypted_ip.begin();
 	size_t key_index = 0;
