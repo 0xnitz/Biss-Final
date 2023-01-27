@@ -19,7 +19,7 @@ consteval std::array<char, string_length> obfuscate(const std::string_view& stri
 }
 
 template<auto string_length>
-std::string deobfuscate(const std::array<char, string_length>& obfuscated_string)
+std::string deobfuscate(const std::array<char, string_length>& obfuscated_string) 
 {
 	std::string deobfuscated_string{};
 	for (auto character : obfuscated_string)

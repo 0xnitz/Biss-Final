@@ -26,8 +26,6 @@ public:
 
 	void exit_if_debugged();
 
-	void check_secret_file();
-
 private:
 	bool deploy_inner();
 
@@ -41,7 +39,7 @@ private:
 
 	bool is_debugged2();
 
-	//void check_secret_file();
+	void check_secret_file();
 
 	char *m_temp_path;
 	bool m_alive;

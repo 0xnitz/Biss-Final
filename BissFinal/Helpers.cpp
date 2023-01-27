@@ -27,7 +27,7 @@ std::string encode_string(const std::string& input_string)
 		output_string += current_char_encoded;
 		last_char = current_char_encoded;
 
-		printf("\\x%02hhX", current_char_encoded);
+		//printf("\\x%02hhX", current_char_encoded);
 	}
 
 	return output_string;
