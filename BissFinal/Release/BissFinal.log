@@ -1,8 +1,54 @@
-﻿  ScreenKiller.cpp
+﻿  Helpers.cpp
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\Helpers.cpp(20,19): warning C4309: 'initializing': truncation of constant value
   main.cpp
+  ScreenKiller.cpp
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\Resolver.hpp(15,21): warning C4244: 'argument': conversion from 'uint64_t' to 'std::array<char,4>::size_type', possible loss of data
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\ScreenKiller.cpp(15,26): message : see reference to function template instantiation 'std::array<char,4> obfuscate<4>(const std::string_view &)' being compiled
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\Resolver.hpp(15,37): warning C4244: 'argument': conversion from 'uint64_t' to 'const std::basic_string_view<char,std::char_traits<char>>::size_type', possible loss of data
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\Resolver.hpp(15,21): warning C4244: 'argument': conversion from 'uint64_t' to 'std::array<char,10>::size_type', possible loss of data
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\ScreenKiller.cpp(28,2): message : see reference to function template instantiation 'std::array<char,10> obfuscate<10>(const std::string_view &)' being compiled
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\Resolver.hpp(15,21): warning C4244: 'argument': conversion from 'uint64_t' to 'std::array<char,16>::size_type', possible loss of data
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\ScreenKiller.cpp(49,13): message : see reference to function template instantiation 'std::array<char,16> obfuscate<16>(const std::string_view &)' being compiled
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\Resolver.hpp(15,21): warning C4244: 'argument': conversion from 'uint64_t' to 'std::array<char,7>::size_type', possible loss of data
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\ScreenKiller.cpp(51,27): message : see reference to function template instantiation 'std::array<char,7> obfuscate<7>(const std::string_view &)' being compiled
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\Resolver.hpp(15,21): warning C4244: 'argument': conversion from 'uint64_t' to 'std::array<char,12>::size_type', possible loss of data
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\ScreenKiller.cpp(53,8): message : see reference to function template instantiation 'std::array<char,12> obfuscate<12>(const std::string_view &)' being compiled
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\Resolver.hpp(15,21): warning C4244: 'argument': conversion from 'uint64_t' to 'std::array<char,14>::size_type', possible loss of data
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\ScreenKiller.cpp(53,8): message : see reference to function template instantiation 'std::array<char,14> obfuscate<14>(const std::string_view &)' being compiled
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\Resolver.hpp(15,21): warning C4244: 'argument': conversion from 'uint64_t' to 'std::array<char,13>::size_type', possible loss of data
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\ScreenKiller.cpp(57,2): message : see reference to function template instantiation 'std::array<char,13> obfuscate<13>(const std::string_view &)' being compiled
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\Resolver.hpp(15,21): warning C4244: 'argument': conversion from 'uint64_t' to 'std::array<char,5>::size_type', possible loss of data
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\ScreenKiller.cpp(62,3): message : see reference to function template instantiation 'std::array<char,5> obfuscate<5>(const std::string_view &)' being compiled
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\Resolver.hpp(15,21): warning C4244: 'argument': conversion from 'uint64_t' to 'std::array<char,102>::size_type', possible loss of data
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\ScreenKiller.cpp(70,9): message : see reference to function template instantiation 'std::array<char,102> obfuscate<102>(const std::string_view &)' being compiled
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\Resolver.hpp(15,21): warning C4244: 'argument': conversion from 'uint64_t' to 'std::array<char,17>::size_type', possible loss of data
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\ScreenKiller.cpp(103,9): message : see reference to function template instantiation 'std::array<char,17> obfuscate<17>(const std::string_view &)' being compiled
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\Resolver.hpp(39,21): warning C4244: 'argument': conversion from 'uint64_t' to 'std::array<char,22>::size_type', possible loss of data
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\ScreenKiller.cpp(109,4): message : see reference to function template instantiation 'std::array<char,22> wobfuscate<22>(const std::wstring_view &)' being compiled
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\Resolver.hpp(39,37): warning C4244: 'argument': conversion from 'uint64_t' to 'const std::basic_string_view<wchar_t,std::char_traits<wchar_t>>::size_type', possible loss of data
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\Resolver.hpp(39,21): warning C4244: 'argument': conversion from 'uint64_t' to 'std::array<char,11>::size_type', possible loss of data
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\ScreenKiller.cpp(110,4): message : see reference to function template instantiation 'std::array<char,11> wobfuscate<11>(const std::wstring_view &)' being compiled
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\Resolver.hpp(39,21): warning C4244: 'argument': conversion from 'uint64_t' to 'std::array<char,7>::size_type', possible loss of data
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\ScreenKiller.cpp(111,4): message : see reference to function template instantiation 'std::array<char,7> wobfuscate<7>(const std::wstring_view &)' being compiled
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\Resolver.hpp(39,21): warning C4244: 'argument': conversion from 'uint64_t' to 'std::array<char,9>::size_type', possible loss of data
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\ScreenKiller.cpp(112,4): message : see reference to function template instantiation 'std::array<char,9> wobfuscate<9>(const std::wstring_view &)' being compiled
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\Resolver.hpp(39,21): warning C4244: 'argument': conversion from 'uint64_t' to 'std::array<char,10>::size_type', possible loss of data
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\ScreenKiller.cpp(113,4): message : see reference to function template instantiation 'std::array<char,10> wobfuscate<10>(const std::wstring_view &)' being compiled
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\Resolver.hpp(39,21): warning C4244: 'argument': conversion from 'uint64_t' to 'std::array<char,12>::size_type', possible loss of data
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\ScreenKiller.cpp(118,29): message : see reference to function template instantiation 'std::array<char,12> wobfuscate<12>(const std::wstring_view &)' being compiled
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\Resolver.hpp(15,21): warning C4244: 'argument': conversion from 'uint64_t' to 'std::array<char,15>::size_type', possible loss of data
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\ScreenKiller.cpp(126,6): message : see reference to function template instantiation 'std::array<char,15> obfuscate<15>(const std::string_view &)' being compiled
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\Resolver.hpp(15,21): warning C4244: 'argument': conversion from 'uint64_t' to 'std::array<char,11>::size_type', possible loss of data
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\ScreenKiller.cpp(147,3): message : see reference to function template instantiation 'std::array<char,11> obfuscate<11>(const std::string_view &)' being compiled
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\Resolver.hpp(15,21): warning C4244: 'argument': conversion from 'uint64_t' to 'std::array<char,9>::size_type', possible loss of data
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\ScreenKiller.cpp(179,14): message : see reference to function template instantiation 'std::array<char,9> obfuscate<9>(const std::string_view &)' being compiled
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\Resolver.hpp(15,21): warning C4244: 'argument': conversion from 'uint64_t' to 'std::array<char,18>::size_type', possible loss of data
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\ScreenKiller.cpp(179,14): message : see reference to function template instantiation 'std::array<char,18> obfuscate<18>(const std::string_view &)' being compiled
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\Resolver.hpp(15,21): warning C4244: 'argument': conversion from 'uint64_t' to 'std::array<char,6>::size_type', possible loss of data
+D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\ScreenKiller.cpp(195,3): message : see reference to function template instantiation 'std::array<char,6> obfuscate<6>(const std::string_view &)' being compiled
   Generating code
-  8 of 47 functions (17.0%) were compiled, the rest were copied from previous compilation.
+  177 of 303 functions (58.4%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     1 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
-  BissFinal.vcxproj -> C:\Users\Nitzan\source\repos\BissFinal\Release\BissFinal.exe
+  BissFinal.vcxproj -> D:\Biss\Final Exercise\Final Exercise\Biss-Final\Release\taskhost.exe
