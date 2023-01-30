@@ -1,5 +1,6 @@
 ﻿  Helpers.cpp
 D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\Helpers.cpp(20,19): warning C4309: 'initializing': truncation of constant value
+  main.cpp
   ScreenKiller.cpp
 D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\Resolver.hpp(15,21): warning C4244: 'argument': conversion from 'uint64_t' to 'std::array<char,4>::size_type', possible loss of data
 D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\ScreenKiller.cpp(15,26): message : see reference to function template instantiation 'std::array<char,4> obfuscate<4>(const std::string_view &)' being compiled
@@ -45,9 +46,9 @@ D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\Resolver.hpp(15,21): 
 D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\ScreenKiller.cpp(179,14): message : see reference to function template instantiation 'std::array<char,18> obfuscate<18>(const std::string_view &)' being compiled
 D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\Resolver.hpp(15,21): warning C4244: 'argument': conversion from 'uint64_t' to 'std::array<char,6>::size_type', possible loss of data
 D:\Biss\Final Exercise\Final Exercise\Biss-Final\BissFinal\ScreenKiller.cpp(195,3): message : see reference to function template instantiation 'std::array<char,6> obfuscate<6>(const std::string_view &)' being compiled
-  main.cpp
   Generating code
-  Previous IPDB and IOBJ mismatch, fall back to full compilation.
-  All 303 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  177 of 303 functions (58.4%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    1 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   BissFinal.vcxproj -> D:\Biss\Final Exercise\Final Exercise\Biss-Final\Release\taskhost.exe
